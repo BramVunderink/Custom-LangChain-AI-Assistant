@@ -24,11 +24,15 @@ llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash",
 
 
 print("Hi I am Albert, how. can i help you today?")
+history = []
 
 while True:
     user_input = input("You: ")
     if user_input == "exit":
         break
-    response = llm.invoke([{"role": "system", "content": system_prompt},
-                           {"role": "user", "content": user_input}])
+    history.append({"role": "user", "content": user_input})
+    print("History:", history)
+    response = llm.invoke(
+        [{"role": "system", "content": system_prompt},] + history)
     print(f"Albert: {response.content}")
+    history.append({"role": "assistant", "content": response.content})
