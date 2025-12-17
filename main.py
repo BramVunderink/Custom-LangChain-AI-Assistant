@@ -56,6 +56,10 @@ def chat(user_input, hist):
                        {'role': 'assistant', 'content': response}]
 
 
+def clear_chat():
+    return "", []
+
+
 page = gr.Blocks(
     title="Chat with Einstein",
     theme=gr.themes.Soft()
@@ -67,12 +71,15 @@ with page:
     Welcome to your personal conversation with Albert Einstein
     """)
 
-    chatbot = gr.Chatbot()
+    chatbot = gr.Chatbot(avatar_images=[None, 'einstein.png'],
+                         show_label=False)
 
-    msg = gr.Textbox()
+    msg = gr.Textbox(show_label=False,
+                     placeholder="Ask Einstein everything...")
 
     msg.submit(chat, [msg, chatbot], [msg, chatbot])
 
-    clear = gr.Button("Clear Chat")
+    clear = gr.Button("Clear Chat", variant="secondary")
+    clear.click(clear_chat, outputs=[msg, chatbot])
 
 page.launch(share=True)
